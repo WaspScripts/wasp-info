@@ -1,0 +1,348 @@
+Title: Linux setup (Debian)
+Description: Full guide on how to setup a graphical multipurpose Linux server.
+Level: 1
+Author: e40dee47-eb0c-4859-8434-44dd4d979673
+Co-Authors: 
+
+In this tutorial I'll teach you guys how to setup a minimal Debian based machine running with low resources.
+
+This tutorial does not cover OSRS or Simba client installation and the server can be used for any purpose you want.
+
+If want to learn how to setup OSRS and Simba on Linux, it is covered in the [Linux botting guide](https://waspscripts.com/blog/Linux%20botting) and if you already have a Linux machine ready you can probably skip this guide.
+
+To be specific, this guide will cover:
+> Creating a new user
+> Setting up an FTP server
+> Setting up Openbox
+> Setting up a X11 VNC server
+
+This guide is made for the **server version of Debian 10**, but should work fine for the most part in any Debian based server distro (Ubuntu too).
+
+If you are using a non server distro, **you probably don't even need this guide for anything**, this is just how to configure a lightweight server.
+
+This guide is also specifically made for a VPS, for a local machine some things might be slightly different.
+
+Some things might also be slightly different depending on your VPS provider.
+
+||~~I personally use https://www.contabo.com
+~~
+**(This is not recommended anymore! Everyone that was using Contabo seem to have been chain banned. Find another VPS provider!)**||
+
+But you can use whatever you want!
+
+The reason I choose Debian is because it's slightly lighter than some other distros (e.g. Ubuntu) and it's still pretty easy to configure.
+
+If you want you can go with an even lighter distro like Arch but I personally have had trouble running Simba properly on non Debian distros.
+
+**Anyway, let's start!**
+
+When you first start your Debian 10 server you will likely need to login as root.
+
+Your first priority should be to change the root user password and make a non root user.
+
+Depending on what country you are from, you can just do those things and be done with it, but if you are not from the US/UK you will likely want to setup a different keyboard layout before doing this. 
+
+This is because it might be hard to write without your keyboard layout properly setup and then you might mess up your passwords with weird symbols you later don't know which ones they were because you were on a keyboard layout you are not used to.
+
+So login as root and open `/etc/default/keyboard` with your text editor of choice, I'm going to use `nano` for this tutorial:
+```bash
+nano /etc/default/keyboard
+```
+Find `XKBLAYOUT` and set it to your keyboard layout initials.
+
+I use portuguese keyboard I set it to `XKBLAYOUT=""pt""`.
+
+For a list of available keyboard layouts you can use the following command when you are not in nano:
+```bash
+localectl list-x11-keymap-layouts
+```
+
+Save the file (with `nano` press `CTRL+X` to save, then `Enter` to keep the current file name, then `Y` to overwrite the current file).
+
+Now we are ready to change our root password:
+```bash
+passwd root
+```
+Answer the prompts that show up and change your password to whatever you want.
+
+With the root password changed let's move on into making our non root user:
+```bash
+adduser username
+```
+`username` can be anything you want.
+Follow the instructions in the prompts, you can ignore most with the exception of password.
+
+Now we want to give our new user `root` previleges so it can be used to install and update software.
+This can easily be done by adding the new user to the `sudo` group:
+```bash
+usermod -G sudo username
+```
+And `username` is whatever you set up previously.
+
+With this done we are now done with the root user. In most cases you will never again need to login as root.
+
+You can now either logout and login with your new user:
+```bash
+exit
+```
+Or just do:
+```bash
+su - username
+```
+
+When you are logged in with your new user, there's a bunch of things we need to do.
+
+First we should check for updated and we can also test if our root previleges were setup properly with it:
+```bash
+sudo apt update && upgrade
+```
+And unless you did something wrong so far it should work and update everything on your server.
+
+Now let's start installing and setting up stuff we might need on our server.
+
+We will be setting up an FTP server now, if you don't need one you can skip this part but they can be really useful to transfer files between your home computer and your server.
+
+First lets install a firewall since the server version of **Debian 10** doesn't come with one:
+```bash
+sudo apt install ufw
+```
+Press `y` and `Enter` when you get prompted for confirmation.
+ 
+Now let's install our FTP server:
+```bash
+sudo apt install vsftpd
+```
+And again `y` and `Enter` when you get prompted for confirmation.
+
+With those installed, we can start configuring them.
+Let's start by allowing FTP connections  in our firewall:
+```bash
+sudo ufw allow 20/tcp
+```
+Now we can start configuring `vstpd`.
+We are going to make a backup of the config file (`/etc/vsftpd.conf`)and then open it with `nano`:
+```bash
+sudo cp /etc/vsftpd.conf /etc/vsftpd.conf_default
+sudo nano /etc/vsftpd.conf
+```
+With `/etc/vsftpd.conf` open we are going to search for the following fields and set them as I have below. If you cannot find some of them check if they are not commented out and if they are, uncomment them.
+```bash
+write_enable=YES
+chroot_list_enable=YES
+chroot_list_file=/etc/vsftpd.chroot_list
+ssl_enable=YES
+```
+Now we want to add our **username** to `/etc/vsftpd.chroot_list`:
+```bash
+echo 'username' | sudo tee --append /etc/vsftpd.chroot_list
+```
+And obviously, username should be your username.
+
+ With that our FTP server is fully configured or rather SFTP server because we enabled SSL :grin: 
+
+Now if we want it to start it and enable it to start on startup we can configure `systemd` to do so:
+```bash
+sudo systemctl start vsftpd
+sudo systemctl enable vsftpd
+```
+Your SFTP server is now running and you should be able to connect to it with FTP software like FileZilla!
+Simply connect to your server ip and use your username and password.
+Now we want to install a Desktop Environment or at least a Window Manager, **DE** and **WM** for short.
+
+The difference between the two is that the WM only manages the windows and the DE is a WM bundled with a lot of extra software (notepad, terminal, calculator, etc).
+
+In most use cases a server never needs a DE or a WM, but for botting OSRS which will be our goal we will need one.
+
+You can install any DE or WM you want but I would recommend you to choose something ultra lightweight because we want our VPS resources to go all for the Simba+OSRS client instances we will be running and since we only really need a WM I would completely ignore DEs.
+
+Anyway, I usually go with Openbox on my servers because it's a very light and modular WM.
+The basic installation of openbox is really really bare bones so we might want to install a couple more things.
+
+I usually go with the following:
+```bash
+sudo apt install lightdm lightdm-gtk-greeter openbox obconf tint2
+```
+This will give a very light but functional installation of Openbox with a login manager, openbox and a panel.
+
+This should be enough for your botting server but you might also want to install a couple more utilities.
+I usually install the following too:
+```bash
+sudo apt install pcmanfm xterm
+```
+To have a light file manager and terminal.
+I don't usually need a text editor other than `nano` but you can install one too if you think you will need it.
+Now assuming you installed the same software as me, you will want `tint2` panel to start with `openbox` or any other software you installed for it and we can do the following by making an autostart config file for open box:
+```bash
+mkdir ~/.config
+mkdir ~/.config/openbox
+echo 'tint2 &' | sudo tee --append ~/.config/openbox/autostart
+```
+With that you should have a fully functional installation of openbox even if bare bones.
+
+I also like to configure the login manager to auto login my user.
+We can do the following by editing `/etc/lightdm/lightdm.conf`.
+Open it with nano:
+```bash
+sudo nano /etc/lightdm/lightdm.conf
+```
+And look for the following fields and change them to this values:
+```bash
+autologin-guest=false
+autologin-user=username
+autologin-user-timeout=0
+```
+And again, username should be your username.
+
+Lastly on this tutorial we are going to setup an X11 VNC server so we can remote control our VPS.
+
+We can start by installing it:
+```bash
+sudo apt install x11vnc
+```
+With X11VNC installed we will want to configure a service for it so it can run on startup:
+```bash
+sudo nano /lib/systemd/system/x11vnc.service
+```
+And now paste this:
+```bash
+[Unit]
+Description=x11vnc service
+After=display-manager.service network.target syslog.target
+
+[Service]
+Type=simple
+ExecStart=/usr/bin/x11vnc -forever -display :0 -auth guess -passwd password
+ExecStop=/usr/bin/killall x11vnc
+Restart=on-failure
+
+[Install]
+WantedBy=multi-user.target
+```
+-password password should be the password you want to setup to connect with VNC.
+
+Now it's not really required but you might want to  setup predefined resolutions.
+You can do the following by opening `/etc/X11/xorg.conf` with nano:
+```bash
+sudo nano /etc/X11/xorg.conf
+```
+And look for `Modes`.
+When you find it, add the the resolutions you want between """" and separating each one.
+Example:
+```bash
+Modes     ""1600x900"" ""800x600""
+```
+Add them in your preferred order and make sure they are valid resolutions.
+When you are done save the file.
+
+If the file for some reason didn't exist, just create it and paste in the following with your own resolutions:
+```bash
+Section ""Device""
+    Identifier    ""Configured Video Device""
+EndSection
+
+Section ""Monitor""
+    Identifier    ""Configured Monitor""
+    HorizSync       30.0-62.0
+    VertRefresh     50.0-70.0
+EndSection
+
+Section ""Screen""
+    Identifier    ""Default Screen""
+    Monitor        ""Configured Monitor""
+    Device        ""Configured Video Device""
+    DefaultDepth    24
+    SubSection ""Display""
+        Depth    24
+        Modes     ""1600x900"" ""800x600""
+    EndSubSection
+EndSection
+```
+
+Now we just have to update systemd to pickup our newly created service and enable it on startup:
+```bash
+sudo systemctl daemon-reload
+sudo systemctl start x11vnc.service
+sudo systemctl enable x11vnc.service
+```
+X11VNC should now be running and you can use a VNC client to connect to it!
+
+Keep in mind that the way we set it up it will only allow local network VNC connections, but that's actually what we want because it's the safe approach.
+
+What we are going to do is when we want to connect is a VNC connection over a SSH tunnel.
+
+What this means is that we first connect to our server with SSH so we are in the local network and then connect VNC to it.
+
+This type of connection is not supported by every VNC client and you need to use one that does or set it up to accept direct VNC connections which is very insecure.
+
+I personally use [MobaXterm](https://mobaxterm.mobatek.net/).
+
+Anyway, our server is now fully setup.
+I would finish everything with a `sudo reboot` and you are done!
+
+I'll leave you with a quick list of all the commands we ran in this tutorial:
+```bash
+nano /etc/default/keyboard
+# XKBLAYOUT = ""COUNTRY_CODE""
+
+passwd root
+
+adduser username
+usermod -G sudo username
+su - username
+
+sudo apt update && upgrade
+
+# FTP Server
+sudo apt install ufw vsftpd -y
+
+sudo ufw allow 20/tcp
+
+sudo cp /etc/vsftpd.conf /etc/vsftpd.conf_default
+sudo nano /etc/vsftpd.conf
+# write_enable=YES
+# chroot_list_enable=YES
+# chroot_list_file=/etc/vsftpd.chroot_list
+# ssl_enable=YES
+
+echo 'username' | sudo tee --append /etc/vsftpd.chroot_list
+
+sudo systemctl start vsftpd
+sudo systemctl enable vsftpd
+
+# Openbox
+sudo apt install lightdm lightdm-gtk-greeter openbox obconf pcmanfm tint2 xterm -y
+
+mkdir ~/.config
+mkdir ~/.config/openbox
+echo 'tint2 &' | sudo tee --append ~/.config/openbox/autostart
+
+sudo nano /etc/X11/xorg.conf
+# Modes     ""1600x900"" ""800x600""
+
+sudo nano /etc/lightdm/lightdm.conf
+# autologin-guest=false
+# autologin-user=torwent
+# autologin-user-timeout=0
+
+
+# X11 VNC Server
+sudo apt install x11vnc -y
+
+sudo nano /lib/systemd/system/x11vnc.service
+# [Unit]
+# Description=x11vnc service
+# After=display-manager.service # network.target syslog.target
+
+# [Service]
+# Type=simple
+# ExecStart=/usr/bin/x11vnc -forever -display :0 -auth guess -passwd password
+# ExecStop=/usr/bin/killall x11vnc
+# Restart=on-failure
+
+# [Install]
+# WantedBy=multi-user.target
+
+sudo systemctl daemon-reload
+sudo systemctl enable x11vnc.service
+sudo reboot
+```
