@@ -1,192 +1,126 @@
 Title: Setup (Windows)
 Description: Full installation setup of Simba, SRL, WaspLib and Scripts
 Level: 0
-Author: e40dee47-eb0c-4859-8434-44dd4d979673
-Co-Authors:
-
-# Video Setup
-
-Video guide by @Daxious
-
-
-
+Author: 15728bc5-1ca9-462c-b649-dec3ab36f019
+Co-Authors: Student (some images)
 
 ### Downloads
 
-You can download Simba from [**here**](https://github.com/Villavu/Simba/releases/download/simba1400-release/Simba-Win32.exe).
+WaspScripts are made to run on the legacy OSRS client which you can download [**here**](https://www.Runescape.com/downloads/oldschool.msi).
 
-If for some reason that link is broken, you can see all Simba releases [**here**](https://github.com/Villavu/Simba/releases).
-In this case, make sure you get the latest **32bits version**.
-If you are on windows it's **very important** you use the **32bits** version of Simba.
+**Recommended install:** You can download Simba with the pre-installed Wasp Launcher from [**here**](https://github.com/torwent/wasp-setup/releases/latest/download/Simba-setup.exe). 
+This is the recommended way to use WaspScripts and will be what's covered in this guide.
 
-### Setting up
+Optionally if you a developer and you know what you are doing Simba is an open-source program and you can find its release history on [**github**]https://github.com/Villavu/Simba/releases/).
 
-To use Simba you pretty much only need to run it. However, since Simba needs to create some files and folders to work, I recommend you make a folder for it. For simplicity sake you can name it "Simba" and then put your Simba.exe in that folder.
-![simba directory](https://enqlpchobniylwpsjcqc.supabase.co/storage/v1/object/public/imgs/posts/0/img00.png)
+### Installing Simba
 
-Now you are ready to run it!
+**If you have an older installation of Simba** skip to the troubleshooting section at the bottom to uninstall before installing Simba.
+
+**Now onto the installation procedure:**
+Run the installer you downloaded in the previous step. 
+
 Depending on where you placed your Simba.exe, the first time you run it you might get a warning from **Windows Defender SmartScreen** like this:
-![warning 1](https://enqlpchobniylwpsjcqc.supabase.co/storage/v1/object/public/imgs/posts/0/img01.png)
-Click "**More info**".
-![warning 2](https://enqlpchobniylwpsjcqc.supabase.co/storage/v1/object/public/imgs/posts/0/img02.png)
-And then "**Run anyway**".
+![warningimg](https://i.imgur.com/DBJtvgd.png)
+Click "**More info**", and then "**Run anyway**" as shown in the image.
 
-Wait for Simba to open up...
+Once the installer finishes, you'll get the option to immediately launch Simba. Alternatively it will create a desktop shortcut & start menu folder and you can open it from there.
 
-Once it opens for the first time, you can **optionally associate simba scripts with simba**:
-![associate scripts](https://enqlpchobniylwpsjcqc.supabase.co/storage/v1/object/public/imgs/posts/0/img03.png)
+**Recommended:** Associate Simba scripts with Simba when asked upon opening Simba for the first time:
+![associatescripts](https://i.imgur.com/uwZGAJb.png)
 
-It doesn't really matter what you choose... I choose Yes.
+**Optional:** Disable console window in View, this is up to the individual but this is what I personally do.
+![img04](https://i.imgur.com/WYOGoUx.png)
 
-Now you can also **optionally** disable the command line prompt.
-I personally find it annoying when I don't need it.
-![img04](https://enqlpchobniylwpsjcqc.supabase.co/storage/v1/object/public/imgs/posts/0/img04.png)
+## Using the Wasp Launcher
 
-You can minimize or close Simba for now.
+Click the **green play ▶️ button twice** in order to launch the in-built WaspLauncher. 
+![img05](https://i.imgur.com/hxAlnVU.png)
 
-If you check your Simba folder now you will see it has a bunch of new stuff there:
-![img05](https://enqlpchobniylwpsjcqc.supabase.co/storage/v1/object/public/imgs/posts/0/img05.png)
+Click Discord login when asked to login, and authorize Wasp when Discord asks you to.
+Copy the token given or click the 📝 icon, wasp launcher should read what you've copied but if not just paste it into the box in the WaspLauncher.
+![tokenimg](https://i.imgur.com/K0AfzNy.png)
 
-In there you will find 2 important folders: **Includes** and **Scripts**.
+In the launcher you will find free scripts as well as scripts you've subscribed to, along with a handful of other useful features like auto-updating scripts & packages required to run Waspscripts.
+![launcherimg](https://i.imgur.com/XB1XxzL.png)
+PS. Scripts in yellow are premium scripts you're currently subscribed to.
 
-The Includes folders is where you will put the **Includes** (well duh...).
+**Recommended** Enable auto-updating in the top right of the Wasp Launcher to always stay up to date.
+![updateimg](https://i.imgur.com/BRLTY5V.png)
+If you choose to date manually you can do so with the update buttons, it will show when you are out of date when your versions are in red text like in the picture.
 
-An include is a sort of framework, a **collection of common functions and procedures** so scripts don't have to contain everything.
-Examples of includes are SRL and my WaspLib.
-You might not need to use this folder though since Simba has a tool to setup things automatically for us.
+**Getting errors running a script?** Try hitting the re-install buttons on SRL-T and WaspLib, and if that didn't help check out the troubleshooting section at the bottom.
 
-The Scripts folder is where you will put the scripts you download or **create**.
 
-Now we are going to install SRL-T and WaspLib.
-You have 3 ways of installing includes, manual,  automatically through Simba or using git.
+# Downloading and running a script:
 
-To manually install a Include, simply download it's zip file from github, and unzip it in:
+Find a script you'd like to run, for this example we'll be using the Wasp Alcher. 
 
-```cmd
-C:\Simba\Includes\
-```
-You can download SRL-T from here:
-> https://github.com/Torwent/SRL-T
+Hit the install button, then click open script. Remember to read the info about the scripts themselves on how to run them and their requirements.
+![scriptexample](https://i.imgur.com/3Mh4i84.png)
 
-Unzip it, change it's name to whatever is required, for example if your unzipped folder is named "SRL-T-master", rename it to "SRL-T" and place it in Includes.
 
-Using git is similar to the manual install, but with git. If you are using it I'm going to assume you don't need instructions.
+Now you have to use target selector to target the Runescape client. Make sure you target Runescape like shown in the gif, incorrectly targetting will result in errors.
+![targetselectorgif](https://i.imgur.com/Z1vTX7w.gif)
 
-For the automatic install which I recommend for most people, open up Simba and click on the package 📦️ icon.
+PS. You can do this at any point, and you only have to do it when you boot up Simba or if it asks you to re-target.
 
-![img06](https://enqlpchobniylwpsjcqc.supabase.co/storage/v1/object/public/imgs/posts/0/img06.png)
+Once you've targetted you will see the current text in the output of Simba, the dimensions should be 765x503 (unless you have Windows display scaling enabled) and the classname should be SunAwtCanvas.
+![img06](https://i.imgur.com/yBDpnnp.png)
 
-In the window that opens up, click the plus icon in the top left corner.
+You're almost done, now fill in your Runescape account info so the script can log back in after breaks and **CLICK ADD** to save your details.
+![img07](https://i.imgur.com/PKnVWoC.png)
 
-![img07](https://enqlpchobniylwpsjcqc.supabase.co/storage/v1/object/public/imgs/posts/0/img07.png)
+ **(Its important to set Runescape to Fixed - Classic Layout in display settings)**
 
-Paste the link of the include you want to install...
+And that's it, you've completed the installation and you are ready to run the script assuming you've followed the scripts instructions. 
 
-![img08](https://enqlpchobniylwpsjcqc.supabase.co/storage/v1/object/public/imgs/posts/0/img08.png)
+# A few additional settings (OPTIONAL)
 
-Click **Ok** and then click **Install**
+Since I used the alcher as an example, I just want to quickly note that an item and a noted item has to be added separately to the alch list.
+[!img08](https://i.imgur.com/GgoSQSQ.png)
 
-If you get prompted with a overwriting warning click **Yes**.
+Antiban features can easily be turned off and on in the antiban manager, you can also adjust when the script goes to sleep and for how long (**Sleep hour is a 24 hour time format**)
+![img08](https://i.imgur.com/feo0ayC.png)
 
-Once that is done, you can install **WaspLib** the same way.
+Turning off the HUD that covers the chatbox in some scripts, and disabling your ability to click the Runescape client (this will help against you misclicking and breaking the script)
+![img09](https://i.imgur.com/QNTa6hH.png) 
+For the HUD you can make it transparent or uncheck the HUD Report checkbox, and enabling Block Real Input will help against misclicks.
 
-The link to **WaspLib** is:
+Adding your own worldlist.
+![img10](https://i.imgur.com/xZqcxbX.png)
+Enter each world separated by a comma and hit the Save button. PS: Pressing delete will delete all of your account info, not just the worlds.
 
-> https://github.com/Torwent/WaspLib
 
-Press the **plus icon**, paste the **link** above, click **Ok** and click **Install**.
+--------------
 
-You can close the **package manager** now.
 
-Now we are going to test if everything was setup correctly.
-
-Type this code into Simba:
-
-```pascal
-{$I SRL-T/osr.simba}
-{$I WaspLib/osr.simba}
-```
-
-Open your **Old School RuneScape Client** and let it load up to the Login Screen.
-
-If you are on **Windows**, I strongly recommend you use the **Official OSRS Client** (not the new steam one).
-
-**RuneLite is not supported!**
-
-Once that's done, **click and drag the green crosshair** on Simba to your RuneScape Client.
-
-![img09](https://enqlpchobniylwpsjcqc.supabase.co/storage/v1/object/public/imgs/posts/0/img09.png)
-
-You will see the windows you drag the crosshair through being highlighted, once the RuneScape client is highlighted release the mouse.
-Keep in mind you should only select the client and nothing of the border.
-
-In this case this first example is **wrong**:
-
-![img10](https://enqlpchobniylwpsjcqc.supabase.co/storage/v1/object/public/imgs/posts/0/img10.png)
-
-This one is **right**:
-
-![img11](https://enqlpchobniylwpsjcqc.supabase.co/storage/v1/object/public/imgs/posts/0/img11.png)
-
-Doing this tells Simba that will be it's **target**, because in reality **you can use Simba for other things** that are not RuneScape.
-
-Once you set your client as your target, click the green arrow.
-That's the **Play button** for all scripts.
-
-![img12](https://enqlpchobniylwpsjcqc.supabase.co/storage/v1/object/public/imgs/posts/0/img12.png)
-
-The script will run and if everything is working properly, the output on your debugger should be something similar to this:
-
-![img13](https://enqlpchobniylwpsjcqc.supabase.co/storage/v1/object/public/imgs/posts/0/img13.png)
-
-The key words to know everything is properly installed are:
-
-```pascal
-Successfully compiled
-```
-
-and
-
-```freepascal
-Successfully executed
-```
-
-If your output looks different or displays an **error**, feel free to check the the [common errors](https://waspscripts.com/faq) page or join the discord server and ask around there!
-
-That is it.
-You have successfully Setup **Simba**, **SRL** and **WaspLib**.
-
-Now you can either **make your own scripts**, or put other people scripts in your **Scripts folder**.
-
-I also recommend you to use fixed mode in osrs though it's not necessarily required.
-
-**Have fun Botting!**
 
 # TLDR Guide
 
-Download Simba 1400 **32bit** from here:
-> https://github.com/Villavu/Simba/releases/download/simba1400-release/Simba-Win32.exe
+1. Download [WaspScripts setup](https://github.com/torwent/wasp-setup/releases/latest/download/Simba-setup.exe)
+2. Run the installer, allow it if windows defender asks you to.
+3. Click the  play ▶️  button twice to run the wasp launcher.
+4. Click Discord login when asked to login, and authorize Wasp when Discord asks you to.
+5. Copy the token given or click the 📝 icon, wasp launcher should read what you've copied but if not just paste it into the box.
+6. Select a script, click open script. 
+7. Use the target selector to target the **legacy** Runescape client, if you don't have this download it at the top of the guide.
+8. Enter your account info, click add. 
+9. Adjust script settings as needed and run it, you're done.
 
-**IN WINDOWS IT'S VERY IMPORTANT YOU USE THE 32 BIT VERSION**
-
-Make a folder for it, name it Simba and place the .exe inside.
-
-Run it Simba.exe.
-
-Open Simba Package Manager, the rightmost icon that is a box 📦.
-
-Click the plus icon and paste this:
-> https://github.com/Torwent/SRL-T
-Click Install.
-
-Click the plus icon again and paste this:
-> https://github.com/Torwent/WaspLib
-Click Install.
-
-**You are done.**
-
-You can now download a script or make your own and use it to bot **Old School RuneScape.**
 
 If you run into any problem, either read the whole guide or check the [faq section](https://waspscripts.com/faq)
 
-Using fixed mode in osrs is recommended.
+
+
+--------------
+
+# Troubleshooting
+
+**Uninstalling:** To uninstall Simba simply use the uninstaller located in C:\Users\WindowsUser\AppData\Local\Simba (Replace WindowsUser with your user), after that you can delete the Simba folder.
+![uninstall1](https://i.imgur.com/8SmGEvP.png)
+
+**Fixed mode:** Its important you set the runescape UI to Fixed - Classic Layout, in the display settings unless told to use a different one all wasp scripts are made to work with fixed mode.
+
+**Running into errors:** Check the the [common errors](https://waspscripts.com/faq) page, or [join the discord](https://discord.com/invite/YMYUahmww9) and come to the help-chat channel so we can figure out your problem together.
+
